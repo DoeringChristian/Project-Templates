@@ -17,6 +17,7 @@ pdf:
 		--csl="${ASSETSDIR}/citation-style.csl" \
 		--from="markdown+tex_math_single_backslash+tex_math_dollars" \
 		--to="latex" \
+		--toc \
 		--output="${BUILDDIR}/output.pdf" \
 		--pdf-engine="xelatex"
 
@@ -29,6 +30,7 @@ html:
 		--csl="${ASSETSDIR}/citation-style.csl"\
 		--from="markdown+tex_math_single_backslash+tex_math_dollars" \
 		--to="html5" \
+		--toc \
 		--output="${BUILDDIR}/output.html" \
 		--self-contained
 
