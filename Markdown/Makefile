@@ -1,37 +1,40 @@
 BUILDDIR = build
 SRCDIR = src
 ASSETSDIR = assets
-FILENAME = index
+SRCFILES = $(wildcard ${SRCDIR}/*.md) $(wildcard ${SRCDIR}/*.yaml)
 
 download-cls:
-	mkdir "${ASSETSDIR}" -p
+	mkdir ${ASSETSDIR} -p
 	wget -O "${ASSETSDIR}/citation-style.csl" \
 		"https://raw.githubusercontent.com/citation-style-language/styles/master/harvard-anglia-ruskin-university.csl"
 
 pdf:
 	mkdir "${BUILDDIR}" -p
 	@echo "Creating pdf output"
-	pandoc "${SRCDIR}/${FILENAME}.md" \
+	pandoc ${SRCFILES} \
 		--resource-path="${SRCDIR}" \
-		--citeproc \
 		--csl="${ASSETSDIR}/citation-style.csl" \
-		--from="markdown+tex_math_single_backslash+tex_math_dollars" \
+		--from="markdown+raw_tex+tex_math_single_backslash+tex_math_dollars" \
 		--to="latex" \
 		--toc \
 		--output="${BUILDDIR}/output.pdf" \
-		--pdf-engine="xelatex"
+		--pdf-engine="xelatex" \
+		-F pandoc-acro \
+		-F pandoc-crossref \
+		--citeproc 
 
 html:
 	mkdir "${BUILDDIR}" -p
 	echo "Creating html output"
-	pandoc "${SRCDIR}/${FILENAME}.md" \
+	pandoc ${SRCFILES} \
 		--resource-path="${SRCDIR}" \
-		--citeproc \
 		--csl="${ASSETSDIR}/citation-style.csl"\
-		--from="markdown+tex_math_single_backslash+tex_math_dollars" \
+		--from="markdown+raw_tex+tex_math_single_backslash+tex_math_dollars" \
 		--to="html5" \
-		--toc \
 		--output="${BUILDDIR}/output.html" \
-		--self-contained
+		--self-contained \
+		-F pandoc-acro \
+		-F pandoc-crossref \
+		--citeproc 
 
 all: pdf html
